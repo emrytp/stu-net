@@ -1,6 +1,6 @@
 // src/pages/LandingPage.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Yönlendirme için
+import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
 import { FiChevronDown } from "react-icons/fi";
 import { FaUser, FaUserPlus } from "react-icons/fa";
@@ -27,13 +27,13 @@ const LandingPage = () => {
           </div>
           <button
             className="login-btn"
-            onClick={() => navigate("/login")} // 🠒 Login yönlendirme
+            onClick={() => navigate("/login")}
           >
             <FaUser /> Login
           </button>
           <button
             className="signup-btn"
-            onClick={() => navigate("/register")} // 🠒 Register yönlendirme
+            onClick={() => navigate("/register")}
           >
             <FaUserPlus /> Sign Up
           </button>

@@ -1,28 +1,31 @@
 // backend/server.js
-import express from "express";
-import cors from "cors";
-import userRoutes from "./routes/userRoutes.js";
-import dotenv from "dotenv";
 
-// .env dosyasını yükle
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
 dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
+console.log("📦 server.js başlatıldı"); // 🧠 BURAYA BUNU EKLE
+
+const userRoutes = require("./routes/userRoutes");
+
 app.use(cors());
 app.use(express.json());
-
-// Routes
 app.use("/api/users", userRoutes);
 
-// Test route
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB bağlantısı başarılı"))
+  .catch((err) => console.error("❌ MongoDB bağlantı hatası:", err));
+
 app.get("/", (req, res) => {
-  res.send("Stu-Net backend is working.");
+  res.send("Stu-Net backend ayakta 🚀");
 });
 
-// Sunucuyu başlat
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server ${PORT} portunda çalışıyor`);
 });

@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 }, {
-  timestamps: true // createdAt ve updatedAt otomatik eklenir
+  timestamps: true 
 });
 
 export default mongoose.model("User", userSchema);

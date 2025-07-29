@@ -1,10 +1,13 @@
-// backend/routes/userRoutes.js 
-import express from "express";
-import { registerUser, loginUser } from "../controllers/userController.js";
+// backend/routes/userRoutes.js
+
+const express = require("express");
+const { registerUser, loginUser } = require("../controllers/userController");
 
 const router = express.Router();
 
-router.post("/register", registerUser); // POST /api/users/register
-router.post("/login", loginUser);       // POST /api/users/login
+console.log("✅ userRoutes yüklendi"); // 🧠 BURAYA BUNU EKLE
 
-export default router;
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+
+module.exports = router;
