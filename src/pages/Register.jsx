@@ -1,11 +1,15 @@
 // src/pages/Register.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import './Register.css';
+import { Link, useNavigate } from "react-router-dom";
+import api from "../services/api";
+import "./Register.css";
 
 const Register = () => {
   const [language, setLanguage] = useState("Eng");
   const [showLangOptions, setShowLangOptions] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const translations = {
     Eng: {
@@ -32,6 +36,19 @@ const Register = () => {
     }
   };
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await api.post("/users/register", { email, password });
+      console.log("Kayıt başarılı:", response.data);
+      navigate("/login");
+    } catch (error) {
+      console.error("Kayıt hatası:", error.response?.data || error.message);
+      alert("Kayıt başarısız. Lütfen tekrar deneyin.");
+    }
+  };
+
   return (
     <div
       className="min-h-screen bg-no-repeat bg-center bg-[length:100%_auto] flex items-center justify-center relative px-4"
@@ -41,17 +58,17 @@ const Register = () => {
       <img
         src="/stu-net-logo.png"
         alt="Stu-Net Logo"
-        className="absolute top-8 left-20 w-48 sm:w-52 z-50 pointer-events-none"
+        className="absolute top-8 left-20 w-48 sm:w-52 z-50 cursor-pointer"
+        onClick={() => navigate("/")}
       />
 
-      {/* Dil */}
+      {/* Dil Seçimi */}
       <div className="absolute top-4 right-6 text-white text-sm z-50">
         <div
           className="cursor-pointer select-none relative"
           onClick={() => setShowLangOptions(!showLangOptions)}
         >
           {language} <span className="ml-1">▼</span>
-
           {showLangOptions && (
             <div className="absolute right-0 mt-1 bg-white text-black text-sm rounded shadow-md w-16 z-50">
               {language !== "Eng" && (
@@ -87,7 +104,7 @@ const Register = () => {
           {translations[language].welcome}
         </h2>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleRegister}>
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               {translations[language].email}
@@ -96,7 +113,10 @@ const Register = () => {
               type="email"
               id="email"
               placeholder="username@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-[383px] h-12 px-4 rounded-md bg-white/90 text-black"
+              required
             />
           </div>
 
@@ -108,7 +128,10 @@ const Register = () => {
               type="password"
               id="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-[383px] h-12 px-4 rounded-md bg-white/90 text-black"
+              required
             />
           </div>
 
@@ -124,7 +147,6 @@ const Register = () => {
           {translations[language].continue}
         </div>
 
-        {/* Social icons */}
         <div className="flex justify-between gap-4 mt-4">
           <div className="bg-white p-3 rounded-md flex justify-center items-center w-full">
             <img src="/twitter.png" alt="Twitter" className="h-6" />
@@ -137,7 +159,6 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Terms */}
         <div className="text-center text-xs text-white mt-6">
           {translations[language].agreement}{" "}
           <span className="underline cursor-pointer">{translations[language].terms}</span>{" "}
@@ -145,9 +166,10 @@ const Register = () => {
           <span className="underline cursor-pointer">{translations[language].privacy}</span>
         </div>
 
-        {/* Link to Login */}
         <div className="text-center text-sm text-white mt-3">
-          <Link to="/" className="underline">{translations[language].loginInstead}</Link>
+          <Link to="/login" className="underline hover:text-indigo-300">
+            {translations[language].loginInstead}
+          </Link>
         </div>
       </div>
     </div>

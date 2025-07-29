@@ -1,0 +1,154 @@
+/* src/pages/LandingPage.css */
+
+/* Font ve arka plan */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #000;
+  color: #fff;
+  height: 100%;
+}
+
+/* Ana konteyner */
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #000;
+  z-index: 1000;
+  box-shadow: 0 1px 5px rgba(255, 255, 255, 0.05);
+}
+
+/* Logo */
+.logo img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+/* Navigasyon linkleri */
+.nav-links {
+  display: flex;
+  gap: 56px;
+  margin-left: auto; 
+  margin-right: auto;
+  padding-left: 120px; 
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #aaa;
+}
+
+/* Sağ üst kısım */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.lang-selector {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* Butonlar */
+.login-btn,
+.signup-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: white;
+  transition: all 0.3s;
+}
+
+.login-btn:hover,
+.signup-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+/* Hero Bölümü */
+.hero-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 200px;
+  padding-bottom: 100px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.hero-subtext {
+  font-size: 16px;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+  color: #ccc;
+  text-align: center;
+}
+
+.coming-soon {
+  font-size: 15px;
+  color: #888;
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Glow / Fade animasyonu */
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0.2);
+    opacity: 0.6;
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    opacity: 1;
+  }
+  100% {
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0.2);
+    opacity: 0.6;
+  }
+}
+
+.glow-text {
+  animation: glowPulse 2.5s ease-in-out infinite;
+}

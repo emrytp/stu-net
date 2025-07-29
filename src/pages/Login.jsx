@@ -1,10 +1,15 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import './Login.css';
+import { useNavigate, Link } from "react-router-dom";
+import api from "../services/api";
+import "./Login.css";
 
 const Login = () => {
   const [language, setLanguage] = useState("Eng");
   const [showLangOptions, setShowLangOptions] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const translations = {
     Eng: {
@@ -25,26 +30,35 @@ const Login = () => {
     }
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/users/login", { email, password });
+      alert("Giriş başarılı!");
+      navigate("/");
+    } catch (error) {
+      alert("E-posta veya şifre hatalı.");
+    }
+  };
+
   return (
     <div
       className="min-h-screen bg-no-repeat bg-center bg-[length:100%_auto] flex items-center justify-center relative px-4"
       style={{ backgroundImage: "url('/background.jpg')" }}
     >
-      {/* Logo */}
       <img
         src="/stu-net-logo.png"
         alt="Stu-Net Logo"
-        className="absolute top-8 left-20 w-48 sm:w-52 z-50 pointer-events-none"
+        className="absolute top-8 left-20 w-48 sm:w-52 z-50 cursor-pointer"
+        onClick={() => navigate("/")}
       />
 
-      {/* Dil Seçimi */}
       <div className="absolute top-4 right-6 text-white text-sm z-50">
         <div
           className="cursor-pointer select-none relative"
           onClick={() => setShowLangOptions(!showLangOptions)}
         >
           {language} <span className="ml-1">▼</span>
-
           {showLangOptions && (
             <div className="absolute right-0 mt-1 backdrop-blur-sm bg-white/10 text-white text-sm rounded border border-white/20 w-16 z-50">
               {Object.keys(translations).map((lang) => (
@@ -66,13 +80,12 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Form */}
       <div className="w-full max-w-sm text-white z-10">
         <h2 className="text-3xl font-bold text-center mb-8">
           {translations[language].welcome}
         </h2>
 
-        <form className="space-y-5">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               {translations[language].email}
@@ -80,6 +93,8 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="username@gmail.com"
               className="w-[383px] h-12 px-4 rounded-md bg-white/90 text-black"
             />
@@ -92,6 +107,8 @@ const Login = () => {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-[383px] h-12 px-4 rounded-md bg-white/90 text-black"
             />
@@ -105,12 +122,10 @@ const Login = () => {
           </button>
         </form>
 
-        {/* "veya devam et" */}
         <div className="text-center text-sm mt-6 text-white">
           {translations[language].continue}
         </div>
 
-        {/* Sosyal ikonlar */}
         <div className="flex justify-between gap-4 mt-4">
           <div className="bg-white p-3 rounded-md flex justify-center items-center w-full">
             <img src="/twitter.png" alt="Twitter" className="h-6" />
@@ -123,7 +138,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Kayıt yönlendirme */}
         <div className="text-center text-sm mt-6 text-white">
           <Link to="/register" className="underline hover:text-indigo-300">
             {translations[language].register}
