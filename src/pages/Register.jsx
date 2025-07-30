@@ -45,20 +45,41 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const userData = await register(name, email, password);
-      loginUser(userData); // ✅ Otomatik login
-      alert("Kayıt başarılı, giriş yapıldı!");
-      navigate("/");
+      // 💡 Eksik gönderimi önlemek için kontrol
+      if (!name || !email || !password) {
+        alert("Lütfen tüm alanları doldurun.");
+        return;
+      }
+
+      // ✅ Register işlemi
+      await register(name, email, password);
+
+      // ✅ Login işlemi (otomatik giriş)
+      const loginRes = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const loginData = await loginRes.json();
+
+      if (loginRes.ok) {
+        localStorage.setItem("token", loginData.token);
+        loginUser(loginData); // Context'e yaz
+        alert("Kayıt başarılı, giriş yapıldı!");
+        navigate("/profile");
+      } else {
+        throw new Error(loginData.message || "Giriş başarısız.");
+      }
+
     } catch (error) {
-      console.error("Kayıt hatası:", error.response?.data || error.message);
-      alert("Kayıt başarısız. Lütfen tekrar deneyin.");
+      console.error("Kayıt hatası:", error);
+      alert("Kayıt başarısız: " + (error.message || "Bilinmeyen hata."));
     }
   };
 
   return (
-    <div
-      className="min-h-screen bg-no-repeat bg-center bg-[length:100%_auto] flex items-center justify-center relative px-4"
-    >
+    <div className="min-h-screen bg-no-repeat bg-center bg-[length:100%_auto] flex items-center justify-center relative px-4">
       <img
         src="/stu-net-logo.png"
         alt="Stu-Net Logo"

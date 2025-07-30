@@ -10,9 +10,11 @@ const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem("user");
     return userData ? JSON.parse(userData) : null;
   });
+
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Uygulama yüklendiğinde token varsa kullanıcıyı otomatik getir
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
 
@@ -28,6 +30,7 @@ const AuthProvider = ({ children }) => {
         .catch(() => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
+          setUser(null);
         })
         .finally(() => setLoading(false));
     } else {
@@ -35,18 +38,20 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Giriş yapınca kullanıcıyı ve token’ı kaydet
   const loginUser = (userData, token) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
-    navigate("/");
+    navigate("/profile"); // login sonrası direkt profili göster
   };
 
+  // Çıkış yapınca her şeyi sil ve ana sayfaya dön
   const logoutUser = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/login");
+    navigate("/"); // çıkış sonrası anasayfa
   };
 
   return (
