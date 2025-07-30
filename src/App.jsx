@@ -4,14 +4,16 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 
-import Loader from "./pages/Loader"; 
+import Loader from "./pages/Loader";
 import LandingPage from "./pages/Landingpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
+import AuthProvider from "./context/AuthContext";
 
 const AppContent = () => {
   const location = useLocation();
@@ -21,8 +23,7 @@ const AppContent = () => {
     setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // 2 saniye bekletme
-
+    }, 2000);
     return () => clearTimeout(timer);
   }, [location]);
 
@@ -33,15 +34,17 @@ const AppContent = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 };
 
-// Router ile sarılmış ana uygulama
 const App = () => {
   return (
     <Router>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 };

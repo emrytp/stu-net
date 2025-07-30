@@ -1,7 +1,8 @@
-// src/pages/Login.jsx
+// src/pages/Login.jsx 
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../services/api";
+import { login as loginService } from "../services/authService"; 
+import { useAuth } from "../context/AuthContext"; // 🔧 login yerine loginUser burada
 import "./Login.css";
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { loginUser } = useAuth(); // ⬅️ Burada loginUser'ı çağırıyoruz
 
   const translations = {
     Eng: {
@@ -18,7 +20,7 @@ const Login = () => {
       password: "Password",
       signin: "Sign in",
       continue: "or continue with",
-      register: "Don't have an account? Sign up"
+      register: "Don't have an account? Sign up",
     },
     Tr: {
       welcome: "Tekrar Hoş Geldin !",
@@ -26,16 +28,18 @@ const Login = () => {
       password: "Şifre",
       signin: "Giriş Yap",
       continue: "veya devam et",
-      register: "Hesabın yok mu? Hemen kayıt ol"
-    }
+      register: "Hesabın yok mu? Hemen kayıt ol",
+    },
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/users/login", { email, password });
+      const data = await loginService(email, password);
+      const { user, token } = data;
+      loginUser(user, token); // ✅ Doğru fonksiyonla giriş yapılıyor
       alert("Giriş başarılı!");
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       alert("E-posta veya şifre hatalı.");
     }
@@ -44,7 +48,6 @@ const Login = () => {
   return (
     <div
       className="min-h-screen bg-no-repeat bg-center bg-[length:100%_auto] flex items-center justify-center relative px-4"
-      style={{ backgroundImage: "url('/background.jpg')" }}
     >
       <img
         src="/stu-net-logo.png"
@@ -61,20 +64,21 @@ const Login = () => {
           {language} <span className="ml-1">▼</span>
           {showLangOptions && (
             <div className="absolute right-0 mt-1 backdrop-blur-sm bg-white/10 text-white text-sm rounded border border-white/20 w-16 z-50">
-              {Object.keys(translations).map((lang) => (
-                lang !== language && (
-                  <div
-                    key={lang}
-                    className="hover:bg-white/20 px-2 py-1 cursor-pointer text-center"
-                    onClick={() => {
-                      setLanguage(lang);
-                      setShowLangOptions(false);
-                    }}
-                  >
-                    {lang}
-                  </div>
-                )
-              ))}
+              {Object.keys(translations).map(
+                (lang) =>
+                  lang !== language && (
+                    <div
+                      key={lang}
+                      className="hover:bg-white/20 px-2 py-1 cursor-pointer text-center"
+                      onClick={() => {
+                        setLanguage(lang);
+                        setShowLangOptions(false);
+                      }}
+                    >
+                      {lang}
+                    </div>
+                  )
+              )}
             </div>
           )}
         </div>
@@ -114,10 +118,7 @@ const Login = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="login-button mx-auto block"
-          >
+          <button type="submit" className="login-button mx-auto block">
             {translations[language].signin}
           </button>
         </form>

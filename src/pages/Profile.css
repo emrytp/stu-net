@@ -1,0 +1,23 @@
+/* src/pages/Profile.css */
+
+.profile-container {
+  margin-top: 80px;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-welcome {
+  margin-top: 16px;
+  font-size: 1.1rem;
+}
+
+.profile-name {
+  font-weight: 600;
+  color: #a5f3fc;
+}
